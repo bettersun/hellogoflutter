@@ -20,11 +20,20 @@ class _HelloPageState extends State<HelloPage> {
             future: HelloPlugin.hello(),
             builder: (c, snapshot) {
               if (!snapshot.hasData) {
-                return Text('Hello插件执行出错');
+                return Text('Hello插件hello函数运行出错');
               }
               return Text(snapshot.data);
             },
-          )
+          ),
+          FutureBuilder<String>(
+            future: HelloPlugin.message('warrior'),
+            builder: (c, snapshot) {
+              if (!snapshot.hasData) {
+                return Text('Hello插件message函数运行出错');
+              }
+              return Text(snapshot.data);
+            },
+          ),
         ],
       )),
     );

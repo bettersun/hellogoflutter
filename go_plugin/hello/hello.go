@@ -1,6 +1,8 @@
 package hello
 
 import (
+	"encoding/json"
+
 	"github.com/go-flutter-desktop/go-flutter"
 	"github.com/go-flutter-desktop/go-flutter/plugin"
 )
@@ -10,6 +12,7 @@ import (
 const (
 	channelName = "bettersun.go-flutter.plugin.hello"
 	hello       = "hello"
+	message     = "message"
 )
 
 // 声明插件结构体
@@ -22,10 +25,31 @@ var _ flutter.Plugin = &HelloPlugin{}
 func (HelloPlugin) InitPlugin(messenger plugin.BinaryMessenger) error {
 	channel := plugin.NewMethodChannel(messenger, channelName, plugin.StandardMethodCodec{})
 	channel.HandleFunc(hello, helloFunc)
+	channel.HandleFunc(message, messageFunc)
 	return nil
 }
 
-// 插件中具体的执行函数
+// 具体的逻辑处理函数，无参数传递
 func helloFunc(arguments interface{}) (reply interface{}, err error) {
-	return "hello go-flutter", nil
+
+	return "Hello, go-flutter", nil
+}
+
+// 具体的逻辑处理函数，有参数传递
+func messageFunc(arguments interface{}) (reply interface{}, err error) {
+
+	var param string
+	if arguments == nil {
+		param = ""
+	}
+
+	switch arguments.(type) {
+	case string:
+		param = arguments.(string)
+	default:
+		newValue, _ := json.Marshal(arguments)
+		param = string(newValue)
+	}
+
+	return "Welcome to go-flutter, " + param, nil
 }
