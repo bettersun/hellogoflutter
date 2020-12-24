@@ -2,6 +2,9 @@ package hello
 
 import (
 	"encoding/json"
+	"fmt"
+	"log"
+	"time"
 
 	"github.com/go-flutter-desktop/go-flutter"
 	"github.com/go-flutter-desktop/go-flutter/plugin"
@@ -26,6 +29,10 @@ func (HelloPlugin) InitPlugin(messenger plugin.BinaryMessenger) error {
 	channel := plugin.NewMethodChannel(messenger, channelName, plugin.StandardMethodCodec{})
 	channel.HandleFunc(hello, helloFunc)
 	channel.HandleFunc(message, messageFunc)
+
+	// 向Dart端发送消息
+	go sendInterval(channel)
+
 	return nil
 }
 
@@ -52,4 +59,18 @@ func messageFunc(arguments interface{}) (reply interface{}, err error) {
 	}
 
 	return "Welcome to go-flutter, " + param, nil
+}
+
+// 向Dart端发送消息(定时)
+func sendInterval(channel *plugin.MethodChannel) {
+	ticker := time.NewTicker(time.Second * 1)
+	go func() {
+		for _ = range ticker.C {
+			fmt.Println("sendInterval")
+			err := channel.InvokeMethod("interval", time.Now().Format("2006/01/02 15:04:05"))
+			if err != nil {
+				log.Println(err)
+			}
+		}
+	}()
 }
