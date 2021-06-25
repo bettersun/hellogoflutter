@@ -12,5 +12,3 @@ a go flutter example
 [go-flutter开发桌面应用（四） go-flutter插件中参数的传递 struct转map](https://zhuanlan.zhihu.com/p/337252450)
 
 [go-flutter开发桌面应用（五） go-flutter的Go端向Dart端发送消息](https://zhuanlan.zhihu.com/p/339122863)
-
-[go-flutter开发桌面应用（六）hover run启动慢](https://zhuanlan.zhihu.com/p/339162897)
